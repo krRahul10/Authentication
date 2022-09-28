@@ -1,11 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import { Header } from "./Components/Header";
+import { Login } from "./Components/Login";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Rahul's Authentication </h1>
-    </div>
+    <>
+      <Header />
+      
+      <Login />
+    </>
   );
 }
 
