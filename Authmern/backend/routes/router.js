@@ -1,5 +1,6 @@
 const express = require("express");
 const userdb = require("../models/userSchema");
+const bcrypt = require("bcryptjs")
 const router = new express.Router();
 
 
@@ -44,7 +45,28 @@ router.post("/register", async (req, res) => {
 // ************login RESTapi **********
 
 router.post("/login",async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
+    const { email, password } = req.body;
+
+    if( !email || !password ){
+        res.status(422).json({ error: "fill all the details"})
+    } 
+
+    try{
+        const userValid = await userdb.findOne({email:email})
+
+        if(!userValid){
+            const isMatch = await bcrypt.compare(password, userValid.password)
+            if(!isMatch){
+                res.status(422).json({error:"Invalid Details"})
+            }else {
+                
+            }
+        }
+
+    }catch(err){
+        
+    }
 })
 
 
