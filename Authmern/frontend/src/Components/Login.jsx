@@ -1,9 +1,43 @@
 import React from "react";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import "./mix.css";
 
 export const Login = () => {
   const [passShow, setPassShow] = useState(false);
+  const [inpval, setInpval] = useState({
+    email: "",
+    password: "",
+  });
+  console.log(inpval);
+
+  const setVal = (e) => {
+    const { name, value } = e.target;
+    setInpval(() => {
+      return {
+        ...inpval,
+        [name]: value,
+      };
+    });
+  };
+
+  const loginUser = (e) => {
+    e.preventDefault();
+    const { email, password } = inpval;
+
+    if (email === "") {
+      alert("please enter your email");
+    } else if (!email.includes("@")) {
+      alert("please enter valid email");
+    } else if (password === "") {
+      alert("please enter your password");
+    } else if (password.length < 4) {
+      alert("password must be 4 char");
+    } else {
+      alert("User Login Successfully Done");
+    }
+  };
+
   return (
     <>
       <section>
@@ -20,6 +54,8 @@ export const Login = () => {
                 type="text"
                 name="email"
                 id="email"
+                value={inpval.email}
+                onChange={setVal}
                 placeholder="Enter Your Email Address"
               />
             </div>
@@ -30,6 +66,8 @@ export const Login = () => {
                   type={!passShow ? "password" : "text"}
                   name="password"
                   id="password"
+                  value={inpval.password}
+                  onChange={setVal}
                   placeholder="Enter Your Password"
                 />
                 <div
@@ -40,8 +78,10 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-            <button className="btn">Login</button>
-            <p>Don't have an Account? Sign Up</p>
+            <button className="btn" onClick={loginUser}>Login</button>
+            <p>
+              Don't have an Account? <NavLink to="/register">Sign Up</NavLink>
+            </p>
           </form>
         </div>
       </section>
