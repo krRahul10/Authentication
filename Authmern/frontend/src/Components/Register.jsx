@@ -10,9 +10,9 @@ export const Register = () => {
     fname: "",
     email: "",
     password: "",
-    cpassword: "",
+    cpassword: ""
   });
-  console.log(inpval)
+  // console.log(inpval)
 
   const setVal = (e) => {
     const { name, value } = e.target;
@@ -24,7 +24,7 @@ export const Register = () => {
     });
   };
 
-  const addUserData = (e) => {
+  const addUserData = async (e) => {
     e.preventDefault();
     const { fname, email, password, cpassword } = inpval;
 
@@ -43,7 +43,21 @@ export const Register = () => {
     } else if (cpassword.length < 4) {
       alert("confirm password must be 4 char");
     } else {
-      alert("user registration successfully");
+      const res = await fetch("http://localhost:8080/register",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          fname, email, password, cpassword
+        })
+      })
+
+      const data = await res.json()
+      console.log("data", data)
+      // alert("user registration successfully");
+
+
     }
   };
 
