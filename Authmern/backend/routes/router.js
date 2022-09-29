@@ -2,6 +2,9 @@ const express = require("express");
 const userdb = require("../models/userSchema");
 const router = new express.Router();
 
+
+//*******register RESTapi*********
+
 router.post("/register", async (req, res) => {
   // console.log(req.body)
   const { fname, email, password, cpassword } = req.body;
@@ -28,7 +31,7 @@ router.post("/register", async (req, res) => {
 
       const storeData = await finalUser.save()
     //   console.log(storeData)
-    res.status(201).json(storeData)
+    res.status(201).json({status:201,storeData})
 
     }
   } catch (err) {
@@ -36,6 +39,14 @@ router.post("/register", async (req, res) => {
     console.log("Catch block error");
   }
 });
+
+
+// ************login RESTapi **********
+
+router.post("/login",async (req, res) => {
+    console.log(req.body)
+})
+
 
 module.exports = router;
 

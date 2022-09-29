@@ -9,7 +9,7 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  console.log(inpval);
+  // console.log(inpval);
 
   const setVal = (e) => {
     const { name, value } = e.target;
@@ -21,7 +21,7 @@ export const Login = () => {
     });
   };
 
-  const loginUser = (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
     const { email, password } = inpval;
 
@@ -34,7 +34,19 @@ export const Login = () => {
     } else if (password.length < 4) {
       alert("password must be 4 char");
     } else {
-      alert("User Login Successfully Done");
+      // alert("User Login Successfully Done");
+      const res = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          email,password
+        })
+      });
+
+      const data = await res.json()
+      console.log("data",data)
     }
   };
 
@@ -78,7 +90,9 @@ export const Login = () => {
                 </div>
               </div>
             </div>
-            <button className="btn" onClick={loginUser}>Login</button>
+            <button className="btn" onClick={loginUser}>
+              Login
+            </button>
             <p>
               Don't have an Account? <NavLink to="/register">Sign Up</NavLink>
             </p>

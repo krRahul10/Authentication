@@ -54,7 +54,11 @@ export const Register = () => {
       })
 
       const data = await res.json()
-      console.log("data", data)
+      // console.log("data", data)
+      if(data.status === 201){
+        alert("user registration successfully");
+        setInpval({...inpval, fname:"",email:"",password:"",cpassword:""})
+      }
       // alert("user registration successfully");
 
 
