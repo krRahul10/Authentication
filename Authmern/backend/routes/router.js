@@ -1,6 +1,7 @@
 const express = require("express");
 const userdb = require("../models/userSchema");
 const bcrypt = require("bcryptjs")
+const cookie = require('cookie-parser')
 const router = new express.Router();
 
 
@@ -55,12 +56,14 @@ router.post("/login",async (req, res) => {
     try{
         const userValid = await userdb.findOne({email:email})
 
-        if(!userValid){
+        if(userValid){
             const isMatch = await bcrypt.compare(password, userValid.password)
             if(!isMatch){
                 res.status(422).json({error:"Invalid Details"})
             }else {
-                
+                const token = await userValid.generateAuthToken()
+
+                console.log(token);
             }
         }
 

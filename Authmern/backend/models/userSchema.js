@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const keysecret = "rahulKumarisbestdeveloperintheworldawesome";
 
 const userSchema = mongoose.Schema({
   fname: {
@@ -41,16 +44,30 @@ const userSchema = mongoose.Schema({
 // password hashing before save by pre method of mongoDB
 
 userSchema.pre("save", async function (next) {
-    this.password = await bcrypt.hash(this.password, 10);
-    this.cpassword = await bcrypt.hash(this.cpassword, 10);
-  
-    next();
-  });
+  this.password = await bcrypt.hash(this.password, 10);
+  this.cpassword = await bcrypt.hash(this.cpassword, 10);
+
+  next();
+});
+
+// token generate here before model
+
+userSchema.methods.generateAuthToken = async function(){
+  try {
+    let token23 = jwt.sign({ _id: this._id }, keysecret, {
+      expiresIn: "1d"
+    });
+
+    this.tokens = this.tokens.concat({ token: token23 });
+    await this.save();
+    return token23;
+  } catch (error) {
+    res.status(422).json(error)
+  }
+};
 
 // creating model
 
 const userdb = new mongoose.model("users", userSchema);
-
-
 
 module.exports = userdb;
