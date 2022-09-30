@@ -1,7 +1,7 @@
 const express = require("express");
 const userdb = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
-const authenticate = require("../middleware/authenticate")
+const authenticate = require("../middleware/authenticate");
 // const cookie = require("cookie-parser");
 const router = new express.Router();
 
@@ -82,14 +82,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
 //**********user validate check  ********
 
-router.get("/validuser",authenticate, async (req,res) => {
-  console.log("done")
-
-//  console.log( req.headers.authorization)
-})
-
+router.get("/validuser", authenticate, async (req, res) => {
+  // console.log("done")
+  try {
+    const validUserOne = await userdb.findOne({ _id: req.userId });
+    res.status(201).json({ status: 201, validUserOne });
+  } catch (err) {
+    res.status(401).json({status:401,err})
+  }
+});
 
 module.exports = router;

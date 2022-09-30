@@ -2,17 +2,33 @@ const jwt = require("jsonwebtoken");
 const userdb = require("../models/userSchema");
 const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
 
-const authenticate = async (req,res,next) => {
+const authenticate = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
 
-    console.log(token)
-    
+    // console.log(token);
 
-    // const verifytoken = jwt.verify(token, keySecret);
-    // console.log(verifytoken);
+    //*****verify always key aur token hoga*******
+
+    const verifytoken = jwt.verify(token, keySecret);
+
+    //console.log(verifytoken);
+
+    const rootUser = await userdb.findOne({ _id: verifytoken._id });
+
+    // console.log("rootUser", rootUser);
+
+    if (!rootUser) {
+      throw new Error("User Not Found");
+    }
+
+    req.token = token;
+    req.rootUser = rootUser;
+    req.userId = rootUser._id;
+
+    next();
   } catch (err) {
-    // console.log("error", err);
+    res.status(401).json({status:401,message:"Unauthorized No Token Provide"})
   }
 };
 

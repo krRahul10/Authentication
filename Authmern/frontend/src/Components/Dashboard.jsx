@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Dashboard = () => {
+
+    const history = useNavigate()
 
   const DashBoardValid = async () => {
 
@@ -10,13 +13,23 @@ export const Dashboard = () => {
     const res = await fetch("http://localhost:8080/validuser", {
       method: "GET",
       headers: {
-        "authorization": token,
+        "Authorization": token,
         'Content-Type': 'application/json'
       }
     });
 
     const data = await res.json();
-    console.log("data", data);
+
+    // console.log("Data By Valid API", data);
+
+    if(!data || data.status === 401){
+        console.log("error page redirect");
+        history("*")
+    }
+    else {
+        // console.log("user verify")
+        history("/dashboard")
+    }
   };
 
   useEffect(() => {
