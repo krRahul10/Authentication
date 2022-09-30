@@ -1,16 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./mix.css";
 
 export const Register = () => {
+  const history = useNavigate();
   const [passShow, setPassShow] = useState(false);
   const [cpassShow, setCPassShow] = useState(false);
   const [inpval, setInpval] = useState({
     fname: "",
     email: "",
     password: "",
-    cpassword: ""
+    cpassword: "",
   });
   // console.log(inpval)
 
@@ -43,25 +44,33 @@ export const Register = () => {
     } else if (cpassword.length < 4) {
       alert("confirm password must be 4 char");
     } else {
-      const res = await fetch("http://localhost:8080/register",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
+      const res = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify({
-          fname, email, password, cpassword
-        })
-      })
+        body: JSON.stringify({
+          fname,
+          email,
+          password,
+          cpassword,
+        }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
       // console.log("data", data)
-      if(data.status === 201){
+      if (data.status === 201) {
         alert("user registration successfully");
-        setInpval({...inpval, fname:"",email:"",password:"",cpassword:""})
+        history("/");
+        setInpval({
+          ...inpval,
+          fname: "",
+          email: "",
+          password: "",
+          cpassword: "",
+        });
       }
       // alert("user registration successfully");
-
-
     }
   };
 

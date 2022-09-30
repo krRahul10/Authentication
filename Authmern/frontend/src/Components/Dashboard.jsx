@@ -1,34 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../ContextProvider/Context";
 
 export const Dashboard = () => {
 
-    const history = useNavigate()
+const { logindata, setLoginData } = useContext(LoginContext);
+
+//   console.log(logindata.validUserOne.email);
+// const email = logindata.validUserOne
+  const history = useNavigate();
 
   const DashBoardValid = async () => {
-
     const token = JSON.parse(localStorage.getItem("usersdatatoken"));
     // console.log("tokenJSON",token)
 
     const res = await fetch("http://localhost:8080/validuser", {
       method: "GET",
       headers: {
-        "Authorization": token,
-        'Content-Type': 'application/json'
-      }
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
     });
 
     const data = await res.json();
 
     // console.log("Data By Valid API", data);
 
-    if(!data || data.status === 401){
-        console.log("error page redirect");
-        history("*")
-    }
-    else {
-        // console.log("user verify")
-        history("/dashboard")
+    if (!data || data.status === 401) {
+      console.log("error page redirect");
+      history("*");
+    } else {
+    //   console.log("user verify");
+      setLoginData(data);
+      history("/dashboard");
     }
   };
 
@@ -50,7 +54,8 @@ export const Dashboard = () => {
           alt=""
           style={{ width: "300px", height: 200, marginTop: "20px" }}
         />
-        <h1>User Email:Rahul@gmail.com</h1>
+        <h1>User Email: {logindata ? logindata.validUserOne.email : ""}</h1>
+        
       </div>
     </div>
   );
