@@ -39,14 +39,23 @@ export const Login = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          
         },
-        body:JSON.stringify({
-          email,password
-        })
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      const data = await res.json()
-      console.log("data",data)
+      const data = await res.json();
+      console.log("data", data);
+
+      if (data.status === 201) {
+        console.log("token",data.result.token)
+        localStorage.setItem("usersdatatoken", data.result.token);
+        setInpval({ ...inpval, email: "", password: "" });
+      }
     }
   };
 
