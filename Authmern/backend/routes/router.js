@@ -1,6 +1,7 @@
 const express = require("express");
 const userdb = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
+const authenticate = require("../middleware/authenticate")
 // const cookie = require("cookie-parser");
 const router = new express.Router();
 
@@ -80,5 +81,15 @@ router.post("/login", async (req, res) => {
     res.status(422).json(err);
   }
 });
+
+
+//**********user validate check  ********
+
+router.get("/validuser",authenticate, async (req,res) => {
+  console.log("done")
+
+//  console.log( req.headers.authorization)
+})
+
 
 module.exports = router;

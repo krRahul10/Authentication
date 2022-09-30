@@ -52,8 +52,8 @@ export const Login = () => {
       console.log("data", data);
 
       if (data.status === 201) {
-        console.log("token",data.result.token)
-        localStorage.setItem("usersdatatoken", data.result.token);
+        // console.log("token",data.result.token)
+        localStorage.setItem("usersdatatoken", JSON.stringify(data.result.token));
         setInpval({ ...inpval, email: "", password: "" });
       }
     }
