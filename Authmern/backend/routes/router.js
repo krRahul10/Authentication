@@ -5,7 +5,7 @@ const authenticate = require("../middleware/authenticate");
 // const cookie = require("cookie-parser");
 const router = new express.Router();
 
-//*******register REST API*********
+//******* register REST API *********
 
 router.post("/register", async (req, res) => {
   // console.log(req.body)
@@ -41,7 +41,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// ************login REST API **********
+// ************ login REST API **********
 
 router.post("/login", async (req, res) => {
   // console.log(req.body)
@@ -82,7 +82,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//**********user validate check  ********
+//********** user validate check  ********
 
 router.get("/validuser", authenticate, async (req, res) => {
   // console.log("done")
@@ -90,7 +90,23 @@ router.get("/validuser", authenticate, async (req, res) => {
     const validUserOne = await userdb.findOne({ _id: req.userId });
     res.status(201).json({ status: 201, validUserOne });
   } catch (err) {
-    res.status(401).json({status:401,err})
+    res.status(401).json({ status: 401, err });
+  }
+});
+
+//************* USER LOGOUT CHECK **********
+
+router.get("/logout", authenticate, async (req, res) => {
+  try {
+    req.rootUser.tokens = req.rootUser.tokens.filter((currelem) => {
+      return currelem.token !== req.token;
+    });
+    res.clearCookie("userCookie", { path: "/" });
+    req.rootUser.save();
+    res.status(201).json({status:201});
+
+  } catch (err) {
+    res.status(401).json({ status: 401, err });
   }
 });
 
