@@ -4,9 +4,11 @@ import "./header.css";
 import { LoginContext } from "../ContextProvider/Context";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const { logindata, setLoginData } = useContext(LoginContext);
+  const history = useNavigate();
   // console.log(logindata.validUserOne.fname);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -15,6 +17,10 @@ export const Header = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const goError = () => {
+    history("*");
   };
   return (
     <>
@@ -27,9 +33,11 @@ export const Header = () => {
                 {logindata.validUserOne.fname[0].toUpperCase()}
               </Avatar>
             ) : (
-              <Avatar style={{ backgroundColor: "green" }} onClick={handleClick} />
+              <Avatar
+                style={{ backgroundColor: "green" }}
+                onClick={handleClick}
+              />
             )}
-            {/* <Avatar style={{ backgroundColor: "green" }}>R</Avatar> */}
           </div>
           <Menu
             id="basic-menu"
@@ -40,9 +48,21 @@ export const Header = () => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            {logindata.validUserOne ? (
+              <>
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Logout</MenuItem>
+              </>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  goError();
+                  handleClose();
+                }}
+              >
+                Profile
+              </MenuItem>
+            )}
           </Menu>
         </nav>
       </header>
