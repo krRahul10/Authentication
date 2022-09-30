@@ -22,6 +22,34 @@ export const Header = () => {
   const goError = () => {
     history("*");
   };
+
+  const goDash = () => {
+    history("/dashboard");
+  };
+
+  const logoutUser = async () => {
+    let token = JSON.parse(localStorage.getItem("usersdatatoken"));
+
+    const res = await fetch("http://localhost:8080/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+        Accept: "application/json",
+      },
+      credentials: "include",
+    });
+
+    const data = await res.json();
+    if (data.status !== 201) {
+      console.log("error");
+    } else {
+      console.log("user logout");
+      localStorage.removeItem("usersdatatoken");
+      setLoginData(false);
+      history("/");
+    }
+  };
   return (
     <>
       <header>
@@ -50,8 +78,22 @@ export const Header = () => {
           >
             {logindata.validUserOne ? (
               <>
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    goDash();
+                    handleClose();
+                  }}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logoutUser();
+                    handleClose();
+                  }}
+                >
+                  Logout
+                </MenuItem>
               </>
             ) : (
               <MenuItem

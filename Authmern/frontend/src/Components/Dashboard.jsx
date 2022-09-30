@@ -3,16 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../ContextProvider/Context";
 
 export const Dashboard = () => {
-
-const { logindata, setLoginData } = useContext(LoginContext);
-
-//   console.log(logindata.validUserOne.email);
-// const email = logindata.validUserOne
+  const { logindata, setLoginData } = useContext(LoginContext);
   const history = useNavigate();
 
   const DashBoardValid = async () => {
     const token = JSON.parse(localStorage.getItem("usersdatatoken"));
-    // console.log("tokenJSON",token)
 
     const res = await fetch("http://localhost:8080/validuser", {
       method: "GET",
@@ -24,13 +19,11 @@ const { logindata, setLoginData } = useContext(LoginContext);
 
     const data = await res.json();
 
-    // console.log("Data By Valid API", data);
-
     if (!data || data.status === 401) {
       console.log("error page redirect");
       history("*");
     } else {
-    //   console.log("user verify");
+      //   console.log("user verify");
       setLoginData(data);
       history("/dashboard");
     }
@@ -55,7 +48,6 @@ const { logindata, setLoginData } = useContext(LoginContext);
           style={{ width: "300px", height: 200, marginTop: "20px" }}
         />
         <h1>User Email: {logindata ? logindata.validUserOne.email : ""}</h1>
-        
       </div>
     </div>
   );
