@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userdb = require("../models/userSchema");
-// const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
+
 
 const authenticate = async (req, res, next) => {
   try {
