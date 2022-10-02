@@ -3,7 +3,7 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
+// const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
 
 const userSchema = mongoose.Schema({
   fname: {
@@ -59,7 +59,7 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.generateAuthToken = async function () {
   try {
-    let token23 = jwt.sign({ _id: this._id }, keySecret, {
+    let token23 = jwt.sign({ _id: this._id }, process.env.KEYSECRET, {
       expiresIn: "1d",
     });
 

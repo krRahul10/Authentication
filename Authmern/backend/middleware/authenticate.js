@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userdb = require("../models/userSchema");
-const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
+// const keySecret = "rahulKumarisbestdeveloperintheworldawesome";
 
 const authenticate = async (req, res, next) => {
   try {
@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
 
     //*****verify always key aur token hoga*******
 
-    const verifytoken = jwt.verify(token, keySecret);
+    const verifytoken = jwt.verify(token, process.env.KEYSECRET);
 
     //console.log(verifytoken);
 

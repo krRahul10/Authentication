@@ -4,7 +4,7 @@ import "./header.css";
 import { LoginContext } from "../ContextProvider/Context";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const { logindata, setLoginData } = useContext(LoginContext);
@@ -58,6 +58,7 @@ export const Header = () => {
       <header>
         <nav>
           <h1>Rahul's AUTHENTICATION</h1>
+          <NavLink to="/">Loging Page</NavLink>
           <div className="avtar">
             {logindata.validUserOne ? (
               <Avatar style={{ backgroundColor: "teal" }} onClick={handleClick}>

@@ -60,7 +60,7 @@ export const PasswordReset = () => {
             </div>
 
             <button className="btn" onClick={senLink}>
-              Login
+              SEND
             </button>
           </form>
           <ToastContainer/>

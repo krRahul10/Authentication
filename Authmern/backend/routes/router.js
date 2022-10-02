@@ -2,8 +2,19 @@ const express = require("express");
 const userdb = require("../models/userSchema");
 const bcrypt = require("bcryptjs");
 const authenticate = require("../middleware/authenticate");
-// const cookie = require("cookie-parser");
 const router = new express.Router();
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken")
+
+// **** email config ****
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+});
 
 //******* register REST API *********
 
@@ -103,11 +114,27 @@ router.get("/logout", authenticate, async (req, res) => {
     });
     res.clearCookie("userCookie", { path: "/" });
     req.rootUser.save();
-    res.status(201).json({status:201});
-
+    res.status(201).json({ status: 201 });
   } catch (err) {
     res.status(401).json({ status: 401, err });
   }
 });
 
+// **********SEND EMAIL LINK FOR PASSWORD RESET *********
+
+router.post("/sendpasswordlink", async (req, res) => {
+  // console.log(req.body)
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(401).json({ status: 401, message: "Enter Your Email " });
+  }
+  try {
+    const userFind = await userdb.findOne({ email: email });
+
+    console.log("userFindOk",userFind)
+  } catch (err) {
+    // res.status(401).json({});
+  }
+});
 module.exports = router;
