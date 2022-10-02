@@ -37,13 +37,15 @@ const userSchema = mongoose.Schema({
       },
     },
   ],
+  verifytoken: {
+    type: String,
+  },
 });
 
 // password hashing before save by pre method of mongoDB
 
 userSchema.pre("save", async function (next) {
-
-    //this isModified bcoz jab password change tab hi
+  //this isModified bcoz jab password change tab hi
 
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);

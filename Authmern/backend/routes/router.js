@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const authenticate = require("../middleware/authenticate");
 const router = new express.Router();
 const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 // **** email config ****
 
@@ -132,9 +132,92 @@ router.post("/sendpasswordlink", async (req, res) => {
   try {
     const userFind = await userdb.findOne({ email: email });
 
-    console.log("userFindOk",userFind)
+    // console.log("userFindOk",userFind)
+
+    //token generate for reset password
+
+    const token = jwt.sign({ _id: userFind._id }, process.env.KEYSECRET, {
+      expiresIn: "120s",
+    });
+    // console.log("RESET Token", token)
+
+    const setUserToken = await userdb.findByIdAndUpdate(
+      { _id: userFind._id },
+      { verifytoken: token },
+      { new: true }
+    );
+
+    // console.log("SetToken", setUserToken);
+
+    if (setUserToken) {
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: "SEND EMAIL FOR PASSWORD FORGET",
+        text: `This Link is valid for only 2 MINUTES http://localhost:3000/forgotpassword/${userFind.id}/${setUserToken.verifytoken}`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("error", error);
+          res.status(401).json({ status: 401, message: "email not send" });
+        } else {
+          console.log("Email Sent", info.response);
+          res.status(201).json({ status: 201, message: "Email Send" });
+        }
+      });
+    }
   } catch (err) {
-    // res.status(401).json({});
+    res.status(401).json({ status: 401, message: "Invalid User" });
   }
 });
+
+// ******** Verify user for forgot password ******
+
+router.get("/forgotpassword/:id/:token", async (req, res) => {
+  const { id, token } = req.params;
+  try {
+    const validUser = await userdb.findOne({ _d: id, verifytoken: token });
+    // console.log("validUser", validUser);
+
+    const verifyToken = jwt.verify(token, process.env.KEYSECRET);
+
+    // console.log(verifyToken);
+    if (validUser && verifyToken._id) {
+      res.status(201).json({ status: 201, validUser });
+    } else {
+      res.status(401).json({ status: 401, message: "user not exist" });
+    }
+  } catch (err) {
+    res.status(401).json({ status: 401, err });
+  }
+});
+
+// ********* Change Password Api**********
+
+router.post("/:id/:token", async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const validUser = await userdb.findOne({ _id: id, verifytoken: token });
+    const verifyToken = jwt.verify(token, process.env.KEYSECRET);
+
+    if (validUser && verifyToken._id) {
+      const newPassowrd = await bcrypt.hash(password, 10);
+      const setNewUserPassword = await userdb.findByIdAndUpdate(
+        { _id: id },
+        { password: newPassowrd }
+      );
+
+      const setUserData = await setNewUserPassword.save();
+      res.status(201).json({ status: 201, setUserData });
+    } else {
+      res.status(401).json({ status: 401, message: "user not exist" });
+    }
+  } catch (err) {
+    res.status(401).json({ status: 401, err });
+  }
+});
+
 module.exports = router;
