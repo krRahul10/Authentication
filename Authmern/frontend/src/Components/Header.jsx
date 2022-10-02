@@ -57,7 +57,7 @@ export const Header = () => {
     <>
       <header>
         <nav>
-          <h1>RK Cloud</h1>
+          <h1>Rahul's AUTHENTICATION</h1>
           <div className="avtar">
             {logindata.validUserOne ? (
               <Avatar style={{ backgroundColor: "teal" }} onClick={handleClick}>

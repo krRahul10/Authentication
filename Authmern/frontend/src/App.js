@@ -8,6 +8,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./ContextProvider/Context";
+import { PasswordReset } from "./Components/PasswordReset";
+import { ForgotPassword } from "./Components/ForgotPassword";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [data, setData] = useState(false);
@@ -52,6 +55,8 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/password-reset" element={<PasswordReset />} />
+            <Route path="/forgotpassword/:id/:token" element={<ForgotPassword />} />
             <Route path="/*" element={<Error />} />
           </Routes>
         </>
