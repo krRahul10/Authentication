@@ -13,7 +13,7 @@ export const PasswordReset = () => {
 
   const senLink = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:8080/sendpasswordlink", {
+    const res = await fetch("https://authentication432.herokuapp.com/sendpasswordlink", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

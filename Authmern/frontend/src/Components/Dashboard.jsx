@@ -12,7 +12,7 @@ export const Dashboard = () => {
   const DashBoardValid = async () => {
     const token = JSON.parse(localStorage.getItem("usersdatatoken"));
 
-    const res = await fetch("http://localhost:8080/validuser", {
+    const res = await fetch("https://authentication432.herokuapp.com/validuser", {
       method: "GET",
       headers: {
         Authorization: token,

@@ -36,7 +36,7 @@ export const Login = () => {
       alert("password must be 4 char");
     } else {
       // alert("User Login Successfully Done");
-      const res = await fetch("http://localhost:8080/login", {
+      const res = await fetch("https://authentication432.herokuapp.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

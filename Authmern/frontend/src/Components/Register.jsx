@@ -44,7 +44,7 @@ export const Register = () => {
     } else if (cpassword.length < 4) {
       alert("confirm password must be 4 char");
     } else {
-      const res = await fetch("http://localhost:8080/register", {
+      const res = await fetch("https://authentication432.herokuapp.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

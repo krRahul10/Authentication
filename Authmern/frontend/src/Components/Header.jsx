@@ -30,7 +30,7 @@ export const Header = () => {
   const logoutUser = async () => {
     let token = JSON.parse(localStorage.getItem("usersdatatoken"));
 
-    const res = await fetch("http://localhost:8080/logout", {
+    const res = await fetch("https://authentication432.herokuapp.com/logout", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

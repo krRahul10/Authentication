@@ -37,7 +37,7 @@ export const ForgotPassword = () => {
 
   const sendPassword = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:8080/${id}/${token}`, {
+    const res = await fetch(`https://authentication432.herokuapp.com/${id}/${token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

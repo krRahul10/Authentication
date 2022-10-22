@@ -6,7 +6,7 @@ const cors = require("cors")
 
 const app = express()
 
-const port = 8080
+const port = process.env.PORT || 8080
 
 //this is for cookies when token is not store
 const corsOptions = {
@@ -22,9 +22,9 @@ app.use(express.json())
 app.use(cors(corsOptions))
 app.use(router)
 
-// app.get("/",(req,res) => {
-//     res.status(201).json("sever created")
-// })
+app.get("/",(req,res) => {
+    res.status(201).json("sever created by heroku")
+})
 
 app.listen(port , ()=>{
     console.log(`server started at : ${port}` )
